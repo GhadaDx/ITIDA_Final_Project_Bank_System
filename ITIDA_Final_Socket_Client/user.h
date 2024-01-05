@@ -6,7 +6,7 @@
 #include <iostream>
 #include "client.h"
 
-class User: public Client_socket
+class User: public Client
 {
 public:
     User();
