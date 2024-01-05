@@ -11,6 +11,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDateTime>
+#include "jsonhandler.h"
 
 class Server : public QObject
 {
