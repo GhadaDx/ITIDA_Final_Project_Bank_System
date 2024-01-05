@@ -4,21 +4,14 @@
         "Age": "25",
         "Balance": "23000",
         "fullname": "Alaa Eldaly",
-        "password": "Alaa123"
+        "password": "Alaa12345"
     },
     "Ghada": {
         "Account Number": "310129",
         "Age": "23",
-        "Balance": "21030",
+        "Balance": "23030",
         "fullname": "Ghada Gomaa",
         "password": "Ghaza"
-    },
-    "Lila": {
-        "Account Number": "2",
-        "Age": "20",
-        "Balance": "123333",
-        "fullname": "Lila Alaa",
-        "password": "Lila123"
     },
     "Rana": {
         "Account Number": "310011",

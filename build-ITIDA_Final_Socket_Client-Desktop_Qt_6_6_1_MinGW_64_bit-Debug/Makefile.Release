@@ -663,7 +663,33 @@ release/main.o: ../ITIDA_Final_Socket_Client/main.cpp C:/Qt/6.6.1/mingw_64/inclu
 		C:/Qt/6.6.1/mingw_64/include/QtCore/qpointer.h \
 		C:/Qt/6.6.1/mingw_64/include/QtCore/qpromise.h \
 		C:/Qt/6.6.1/mingw_64/include/QtCore/qvariant.h \
-		C:/Qt/6.6.1/mingw_64/include/QtCore/q23utility.h
+		C:/Qt/6.6.1/mingw_64/include/QtCore/q23utility.h \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QDebug \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QTextStream \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QDataStream \
+		../ITIDA_Final_Socket_Client/user.h \
+		../ITIDA_Final_Socket_Client/client.h \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QObject \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QString \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/QTcpSocket \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/qtcpsocket.h \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/qtnetworkglobal.h \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/qtnetwork-config.h \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/qtnetworkexports.h \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/qabstractsocket.h \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/qhostaddress.h \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/qiodevice.h \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/QAbstractSocket \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QMetaEnum \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/qmetaobject.h \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/QNetworkProxy \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/qnetworkproxy.h \
+		C:/Qt/6.6.1/mingw_64/include/QtNetwork/qnetworkrequest.h \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QSharedDataPointer \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QUrl \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/qurl.h \
+		C:/Qt/6.6.1/mingw_64/include/QtCore/QVariant \
+		../ITIDA_Final_Socket_Client/admin.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/main.o ../ITIDA_Final_Socket_Client/main.cpp
 
 release/user.o: ../ITIDA_Final_Socket_Client/user.cpp ../ITIDA_Final_Socket_Client/user.h \

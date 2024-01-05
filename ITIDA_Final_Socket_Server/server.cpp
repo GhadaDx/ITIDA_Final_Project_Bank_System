@@ -3,6 +3,7 @@
 Server::Server(QObject *parent)
     : QObject{parent}
 {
+
     connect(&server,&QTcpServer::newConnection,this,&Server::newConnection);
 }
 quint32 Server::counter = 1;

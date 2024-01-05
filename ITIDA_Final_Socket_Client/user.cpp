@@ -63,8 +63,6 @@ bool User::SystemLogIn()
             ok = true;
             break;
         }
-
-
     }
     if (ok)
     {
@@ -77,7 +75,6 @@ bool User::SystemLogIn()
         {
             m_username = Username;
             sendrequesttoserver("GetAccountNumber");
-
         }
     }
     else
@@ -87,8 +84,6 @@ bool User::SystemLogIn()
 
     return ok;
 }
-
-
 
 bool User::CheckAccountNumber(QString accountnumber)
 {
@@ -107,17 +102,8 @@ bool User::CheckAccountNumber(QString accountnumber)
 
 void User::ViewAccountBalance()
 {
-    //quint32 response;
     QDataStream outStream(&m_client);
     outStream.setVersion(QDataStream::Qt_6_6);
-    // cout << "view Account Balance <accountnumber>" << Qt::endl;
-    // cout << "Account number>> " << Qt::endl;
-    // std::cin >> accountnumber;
-    // QString Accountnumber=QString::fromStdString(accountnumber);
-
-    // qin >> accountnumber;
-
-    //bool isValid= CheckAccountNumber(accountnumber);
     if(CheckAccountNumber(m_accountnumber))
     {
         outStream << m_username;
@@ -137,8 +123,6 @@ void User::ViewAccountBalance()
     {
         qInfo() << "Invalid account number please try again";
     }
-
-
 }
 
 void User::ViewTransactionHistory()
@@ -169,10 +153,7 @@ void User::ViewTransactionHistory()
         // client->send_Request(History);
         //qDebug() << "Account Balance is: " << response;
     }
-
 }
-
-
 void User::Get_Account_number()
 {
     QDataStream outStream(&m_client);
@@ -180,7 +161,6 @@ void User::Get_Account_number()
 
     cout << "Get Account Number <username>" << Qt::endl;
     qInfo() << "getting account number";
-
 
     //send request to server to get data
     outStream << m_username;
@@ -192,14 +172,11 @@ void User::Get_Account_number()
     if(m_serverrespond.toBool() == true)
     {
         qInfo()<<"Your Account number is :"<<m_accountnumber;
-
     }
     else
     {
         qInfo()<<"Your Account number is not found please try again";
-
     }
-
 }
 
 void User::Make_Transaction()
@@ -238,7 +215,6 @@ void User::Make_Transaction()
     m_client.waitForReadyRead();
     qInfo()<<"make transaction is :"<<m_serverrespond.toBool();
 }
-
 
 void User::Transfer_Amount()
 {
@@ -339,11 +315,7 @@ void User::sendrequesttoserver(QString request)
     {
         qDebug() << "No Info recieved.";
     }
-
-
 }
-
-
 void User::connectToHost(QHostAddress host, quint16 port)
 {
     if(m_client.isOpen()) disconnect();

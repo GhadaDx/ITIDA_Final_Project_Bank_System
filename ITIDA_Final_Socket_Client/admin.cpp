@@ -9,7 +9,6 @@ Admin::Admin(): qin(stdin), qout(stdout) {
     connect(&m_client,&QTcpSocket::stateChanged,this,&Admin::stateChanged);
     connect(&m_client,&QTcpSocket::readyRead,this,&Admin::readyRead);
     connect(&m_client,&QTcpSocket::errorOccurred,this,&Admin::error);
-
 }
 
 quint16 Admin::showOptions()
@@ -28,7 +27,6 @@ quint16 Admin::showOptions()
     qout.flush();
     qin >> adminchoise;
     return adminchoise;
-
 }
 
 bool Admin::SystemLogIn()
@@ -47,8 +45,6 @@ bool Admin::SystemLogIn()
     QString AdminName=QString::fromStdString(adminName);
     QString Password=QString::fromStdString(password);
     m_adminname = AdminName;
-
-
     while (counter < 3)
     {
         counter++;
@@ -58,8 +54,6 @@ bool Admin::SystemLogIn()
             ok = true;
             break;
         }
-
-
     }
     if (ok)
     {
@@ -76,8 +70,6 @@ bool Admin::SystemLogIn()
 
     return ok;
 }
-
-
 
 bool Admin::CheckAccountNumber(QString accountnumber)
 {
@@ -116,9 +108,6 @@ void Admin::ViewAccountBalance()
         qInfo()<<"Invalid user name";
 
     }
-
-
-
 }
 
 void Admin::ViewTransactionHistory()
@@ -134,8 +123,6 @@ void Admin::ViewTransactionHistory()
     std::cin >> count;
     QString Username=QString::fromStdString(username);
     QString Count=QString::fromStdString(count);
-
-
     if(Count.toInt() <= 0)
     {
         qInfo() << "Please enter a valid count.";
@@ -153,10 +140,7 @@ void Admin::ViewTransactionHistory()
         // client->send_Request(History);
         //qDebug() << "Account Balance is: " << response;
     }
-
-
 }
-
 
 void Admin::GetAccountnumber()
 {
@@ -360,7 +344,6 @@ void Admin::DeleteUser()
     m_client.waitForReadyRead();
     //get the responde from the server
     qInfo()<<"View Account Number is:"<<m_serverrespond.toBool();
-
 }
 
 void Admin::UpdateUser()
