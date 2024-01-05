@@ -20,3 +20,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     jsonhandler.h \
     server.h
+
+DISTFILES += \
+    Admins.json \
+    History.json \
+    Users.json
