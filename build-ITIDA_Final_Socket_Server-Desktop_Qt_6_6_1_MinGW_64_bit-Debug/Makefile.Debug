@@ -58,7 +58,9 @@ OBJECTS       = debug/jsonhandler.o \
 		debug/server.o \
 		debug/moc_server.o
 
-DIST          =  ../ITIDA_Final_Socket_Server/jsonhandler.h \
+DIST          = Admins.json \
+		History.json \
+		Users.json ../ITIDA_Final_Socket_Server/jsonhandler.h \
 		../ITIDA_Final_Socket_Server/server.h ../ITIDA_Final_Socket_Server/jsonhandler.cpp \
 		../ITIDA_Final_Socket_Server/main.cpp \
 		../ITIDA_Final_Socket_Server/server.cpp
