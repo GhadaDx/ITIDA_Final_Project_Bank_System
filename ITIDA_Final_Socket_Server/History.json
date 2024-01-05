@@ -1,0 +1,38 @@
+{
+    "Ghada": {
+        "Transaction History": [
+            {
+                "datetime": "2024-01-05 14:23:05",
+                "details": "-370"
+            },
+            {
+                "datetime": "2024-01-05 14:22:39",
+                "details": "-300"
+            },
+            {
+                "datetime": "2024-01-05 14:22:29",
+                "details": "-100"
+            },
+            {
+                "datetime": "2024-01-05 14:22:21",
+                "details": "100"
+            },
+            {
+                "datetime": "2024-01-05 13:41:33",
+                "details": "-200"
+            },
+            {
+                "datetime": "2024-01-05 13:41:20",
+                "details": "200"
+            }
+        ]
+    },
+    "Rana": {
+        "Transaction History": [
+            {
+                "datetime": "2024-01-05 13:54:22",
+                "details": "200"
+            }
+        ]
+    }
+}
