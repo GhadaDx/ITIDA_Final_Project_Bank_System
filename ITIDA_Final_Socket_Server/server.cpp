@@ -68,7 +68,7 @@ void Server::Handlerequest(QString request,QString role)
     {
         if(request=="TransferAmount")
         {
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             bool ok;
@@ -117,7 +117,7 @@ void Server::Handlerequest(QString request,QString role)
         {
             QString username;
             inStream >> username;
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             QString respond =  JsonHandler::ViewUserField(file, username);
@@ -132,7 +132,7 @@ void Server::Handlerequest(QString request,QString role)
             QString username,password;
             inStream >> username >> password ;
             // ok =printObjectFields(file, username);
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString fileusers = "Users.json";
             QString file = path + fileusers;
             ok = JsonHandler::authenticateUser(file, username, password);
@@ -148,7 +148,7 @@ void Server::Handlerequest(QString request,QString role)
             bool ok;
             QString username, respond;
             inStream >> username ;
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             // ok =printObjectFields(file, username);
@@ -162,7 +162,7 @@ void Server::Handlerequest(QString request,QString role)
             bool ok;
             QString username, respond;
             inStream >> username ;
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             // ok =printObjectFields(file, username);
@@ -179,7 +179,7 @@ void Server::Handlerequest(QString request,QString role)
             QString accountnumber;
             inStream >> amount>> accountnumber>> username;
             //qint32 recievedAmount = amount.toInt();
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString fileusers = "Users.json";
             QString historyfile = "History.json";
             QString file = path + fileusers;
@@ -197,7 +197,7 @@ void Server::Handlerequest(QString request,QString role)
             quint16 recieved_count = count.toInt();
             qDebug() << "username" << username << "recieved_count" << recieved_count ;
 
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString historyfile = "History.json";
             QString fileName =path+ historyfile;
 
@@ -214,7 +214,7 @@ void Server::Handlerequest(QString request,QString role)
             bool ok = true;
             QString username,password;
             inStream >> username >> password ;
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString fileusers = "Admins.json";
             QString file = path + fileusers;
             ok = JsonHandler::authenticateUser(file, username, password);
@@ -229,7 +229,7 @@ void Server::Handlerequest(QString request,QString role)
             bool ok;
             QString username, respond;
             inStream >> username ;
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             // ok =printObjectFields(file, username);
@@ -242,7 +242,7 @@ void Server::Handlerequest(QString request,QString role)
             bool ok;
             QString adminname, username, respond;
             inStream >> adminname >> username ;
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             ok = JsonHandler::printObjectFields(file, username, "Account Number", respond);
@@ -252,7 +252,7 @@ void Server::Handlerequest(QString request,QString role)
         else if(request == "ViewBankDatabase")
         {
             QString DataBase;
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             bool ok = JsonHandler::PrintAllDb(file, DataBase);
@@ -260,7 +260,7 @@ void Server::Handlerequest(QString request,QString role)
         }
         else if(request == "UpdateUser")
         {
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             QString username;
@@ -353,7 +353,7 @@ void Server::Handlerequest(QString request,QString role)
         else if(request == "DeleteUser")
         {
             bool ok;
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString fileHistory = "History.json";
             QString file = path + filename;
@@ -373,7 +373,7 @@ void Server::Handlerequest(QString request,QString role)
         }
         else if(request == "CreateNewUser")
         {
-            QString path = "F:/qtUDEMY/rana/New folder/Server/";
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
             QString filename = "Users.json";
             QString file = path + filename;
             QString username, data, password ,repassword, secondName, balance, age;
@@ -471,6 +471,22 @@ void Server::Handlerequest(QString request,QString role)
 
             }
             outStream << ok;
+        }
+        else if(request == "ViewTransactionHistory")
+        {
+            QString username;
+            QString count;
+            inStream >> username >> count ;
+            quint16 recieved_count = count.toInt();
+            qDebug() << "username" << username << "recieved_count" << recieved_count ;
+
+            QString path = "E:/IMT/ITIDA_Final_Project_Bank_System/ITIDA_Final_Socket_Server/";
+            QString historyfile = "History.json";
+            QString fileName =path+ historyfile;
+
+            QString respond = JsonHandler::ViewTransactionHistory(fileName, username, recieved_count);
+            qDebug() << respond;
+            outStream << respond;
         }
     }
 }
