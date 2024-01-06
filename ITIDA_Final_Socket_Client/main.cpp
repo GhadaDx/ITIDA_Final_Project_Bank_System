@@ -9,24 +9,19 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
     QTextStream qin(stdin);
     QTextStream qout(stdout);
-    // QString username, password;
-    //Login log;
-    //Client_socket client;
-    //client.connectToHost(QHostAddress::LocalHost, 1234);
+    QString request, userInput;
+    quint16 Choise;
+    bool isLoggedIn;
     qout<< "Welcome to the Banking App!" << Qt::endl;
     qout << "Type 'user' to user mode." << Qt::endl;
     qout << "Type 'admin' to admin mode."<< Qt::endl;
     qout << "Type 'exit' to quit."<< Qt::endl;
 
-
-
     while(true)
     {
-        QString request;
 
         qout << "bank>> " << Qt::endl;
-        //qout.flush();
-        QString userInput = qin.readLine();
+        userInput = qin.readLine();
 
         if(userInput.toLower() == "exit")
         {
@@ -37,24 +32,22 @@ int main(int argc, char *argv[])
         {
             User usr;
             usr.connectToHost(QHostAddress::LocalHost, 1234);
-            bool isLoggedIn = usr.SystemLogIn();
+            isLoggedIn = usr.SystemLogIn();
             while(isLoggedIn == true)
             {
                 //show the valid commands for user to choose one
-                quint16 UserChoise = usr.showOptions();
-                switch(UserChoise)
+                Choise = usr.showOptions();
+                switch(Choise)
                 {
                 case 1:
                     request = "GetAccountNumber";
                     usr.sendrequesttoserver( request);
                     //usr.Get_Account_number();
-                    //qDebug() << "Your Account Number is " << AccountNumber;
                     break;
                 case 2:
                     request = "AccountBalance";
                     usr.sendrequesttoserver( request);
                     //usr.ViewAccountBalance();
-                    //qDebug() << "Your account balance is: " << balance;
                     break;
                 case 3:
                     request = "TransactionHistory";
@@ -91,12 +84,12 @@ int main(int argc, char *argv[])
             Admin admin;
             admin.connectToHost(QHostAddress::LocalHost, 1234);
 
-            bool isLoggedIn = admin.SystemLogIn();
+            isLoggedIn = admin.SystemLogIn();
             while(isLoggedIn == true)
             {
 
-                quint16 AdminChoise = admin.showOptions();
-                switch(AdminChoise)
+                Choise = admin.showOptions();
+                switch(Choise)
                 {
                 case 1:
                     request = "GetAccountNumber";
