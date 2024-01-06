@@ -1,8 +1,9 @@
 #include "admin.h"
-#define MAX_USR_AGE 90
-#define MIN_USR_AGE 18
 Admin::Admin(): qin(stdin), qout(stdout) {
-    //client = new Client_socket();
+    outStream.setDevice(&m_client);
+    inStream.setDevice(&m_client);
+    inStream.setVersion(QDataStream::Qt_6_6);
+    outStream.setVersion(QDataStream::Qt_6_6);
     m_role="admin";
     connect(&m_client,&QTcpSocket::connected,this,&Admin::connected);
     connect(&m_client,&QTcpSocket::disconnected,this,&Admin::disconnected);
@@ -14,6 +15,7 @@ Admin::Admin(): qin(stdin), qout(stdout) {
 quint16 Admin::showOptions()
 {
     quint16 adminchoise;
+    qInfo() << "===================================================";
     qInfo() << "Please Select the method to perform: ";
     qInfo() << "1- Get Account Number";
     qInfo() << "2- View Account Balance";
@@ -23,22 +25,25 @@ quint16 Admin::showOptions()
     qInfo() << "6- Delete User";
     qInfo() << "7- Update User";
     qInfo() << "8- Exit Program";
-    qout << "Admin: ";
-    qout.flush();
+    qInfo() << "===================================================";
+    qout << "Admin: " << Qt::endl;
     qin >> adminchoise;
+    qInfo() << "===================================================";
     return adminchoise;
 }
 
 bool Admin::SystemLogIn()
 {
     m_request = "login";
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     outStream<<m_request<<m_role;
     std::string adminName, password;
-    qout << "login>> <username> <password>\n";
-    qout << "login>> " << Qt::endl;
-    std::cin >> adminName >> password;
+    qout <<"login>> <username> <password>\n";
+    qout << "Admin: " << Qt::endl;
+    std::cin >> adminName ;
+    qout << "-----------------------------------------"<< Qt::endl;
+    qout << "Password: " << Qt::endl;
+    std::cin >> password;
+    qout << "-----------------------------------------" <<Qt::endl;
     qInfo() << "Hello: " << adminName;
     quint8 counter = 0;
     bool ok = false;
@@ -86,13 +91,11 @@ bool Admin::CheckAccountNumber(QString accountnumber)
 
 void Admin::ViewAccountBalance()
 {
-    //quint32 responde;
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     std::string username;
-    qInfo() << "view Account Balance <accountnumber>";
-    qInfo() << "Account number>> ";
+    qout << "view Account Balance <User Name>" << Qt::endl;
+    qInfo() << "User Name: " << Qt::endl;
     std::cin >> username;
+    qout << "-----------------------------------------" << Qt::endl;
     QString Username=QString::fromStdString(username);
     outStream << Username;
     m_client.waitForBytesWritten();
@@ -101,26 +104,26 @@ void Admin::ViewAccountBalance()
     qInfo()<<"View Balance is:"<<m_serverrespond.toBool();
     if(m_serverrespond.toBool() == true)
     {
-        qInfo()<<"Your account money is :"<<m_accountBalance;
+        qInfo()<<"Your Account Money is :"<<m_accountBalance;
     }
     else
     {
-        qInfo()<<"Invalid user name";
+        qInfo()<<"Invalid User Name";
 
     }
 }
 
 void Admin::ViewTransactionHistory()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
-    // QString accountnumber;
     std::string count, username;
-    qInfo() << "View Transaction History <username> <count> ";
-    qInfo() << "username>> ";
+    qout << "View Transaction History <username> <count>" << Qt::endl;
+    qout << "username:" << Qt::endl;
     std::cin >> username;
-    qInfo() << "count>> ";
+    qout << "-----------------------------------------" << Qt::endl;
+    qout << "count>> " << Qt::endl;
     std::cin >> count;
+    qout << "-----------------------------------------" << Qt::endl;
+
     QString Username=QString::fromStdString(username);
     QString Count=QString::fromStdString(count);
     if(Count.toInt() <= 0)
@@ -135,21 +138,16 @@ void Admin::ViewTransactionHistory()
         //wait for the respond from the server to view it to the client
         m_client.waitForReadyRead();
         qDebug().noquote() <<"Your transaction history is :"<<m_serverrespond.toString();
-
-        // QByteArray History = "ViewTransactionHistory " + accountnumber + " " + count;
-        // client->send_Request(History);
-        //qDebug() << "Account Balance is: " << response;
     }
 }
 
 void Admin::GetAccountnumber()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     std::string m_usrname;
     qout << "Get Account Number: <username>";
     qout << "username: "<< Qt::endl;
     std::cin  >> m_usrname;
+    qout << "-----------------------------------------" << Qt::endl;
     QString Username=QString::fromStdString(m_usrname);
     //send request to server to get data
     outStream << m_adminname << Username;
@@ -175,28 +173,59 @@ void Admin::ViewBankDatabase()
     //wait for the respond from the server to view it to the client
     m_client.waitForReadyRead();
     //get the responde from the server
-    qInfo()<<"View Account Number is:"<<m_serverrespond.toBool();
+    qInfo()<<"View Data Base is:"<<m_serverrespond.toBool();
     if(m_serverrespond.toBool() == true)
     {
         // Print the entire JSON content
-        qDebug().noquote() << "Contents of JSON file:";
+        qDebug().noquote() << "Contents of Bank Data Base is:";
         qDebug().noquote() << m_DataBase;
-        // qInfo()<<m_DataBase;
+        qout << "-----------------------------------------" << Qt::endl;
     }
 }
 
+bool Admin::SetField(const QString& field, QString& value, bool& ok) {
+    // Send a request to the server to set the specified field
+    std::string newvalue;
+    outStream << m_request << m_role << ok << field << m_username;
+    qout << field << " >>  " << Qt::endl;
+    std::cin >> newvalue;
+    qout << "-----------------------------------------" << Qt::endl;
+    if(field == "password")
+    {
+        std::string passwordagain;
+        qout << "\n-----------------------------------------" << Qt::endl;
+        qout <<"Password again>> " << Qt::endl;
+        std::cin >> passwordagain;
+        qout << "-----------------------------------------" << Qt::endl;
+        QString Passwordagain=QString::fromStdString(passwordagain);
+        outStream << Passwordagain;
+    }
+    QString Newvalue=QString::fromStdString(newvalue);
+    value = Newvalue;
+    outStream << Newvalue;
+    m_client.waitForBytesWritten();
+    m_client.waitForReadyRead();
+    qInfo() << "Your setting " << field << " is :" << m_serverrespond.toBool();
+
+    // Return false if the server responds with an error
+    if (!m_serverrespond.toBool()) {
+        qDebug() << "Error setting " << field;
+        return false;
+    }
+
+    return true;
+}
 void Admin::CreateNewUser()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     QString FieldToChange;
     bool ok= true;
-    std::string firstName, secondName, password, passwordagain, balance, age;
-    QString Password, Passwordagain, SecondName, Balance, Age;
-
-    qout << "user or admin: " << Qt::endl;
-    qout << "username>>  " << Qt::endl;
+    std::string firstName;
+    // std::string secondName, password, passwordagain, balance, age;
+    // QString Password, Passwordagain, SecondName, Balance, Age;
+    qout << "User Name:" << Qt::endl;
     std::cin >> firstName ;
+    qout << "-----------------------------------------" << Qt::endl;
+
     QString Username=QString::fromStdString(firstName);
     FieldToChange = "username";
 
@@ -206,136 +235,41 @@ void Admin::CreateNewUser()
     //wait for the respond from the server to view it to the client
     m_client.waitForReadyRead();
     qInfo()<<"Your transaction history is :"<<m_serverrespond.toBool();
+    if(m_serverrespond.toBool() == true) return;
 
-    if(m_serverrespond.toBool() == false)
+    //-----------------password------------------------
+    ok = false;
+    if (!SetField("password", m_Password, ok)) return;
+    if (!SetField("secondName", m_SecondName, ok)) return;
+    if (!SetField("balance", m_Balance, ok)) return;
+    if (!SetField("age", m_Age, ok)) return;
+    FieldToChange = "all";
+    outStream << m_request << m_role<< ok << FieldToChange << m_username << m_Password << m_SecondName << m_Balance << m_Age;
+    m_client.waitForBytesWritten();
+    //wait for the respond from the server to view it to the client
+    m_client.waitForReadyRead();
+    qInfo()<<"create user is :"<<m_serverrespond.toBool();
+    if(m_serverrespond.toBool() == true)
     {
-        FieldToChange ="password";
-        ok = false;
-        outStream << m_request << m_role<< ok << FieldToChange;
-        qout << "password>>  " << Qt::endl;
-        std::cin >> password ;
-        qout << "passwordagain>>  " << Qt::endl;
-        std::cin >> passwordagain ;
-        Password=QString::fromStdString(password);
-        Passwordagain=QString::fromStdString(passwordagain);
-        m_Password=Password;
-        outStream << Password << Passwordagain;
-        m_client.waitForBytesWritten();
-        //wait for the respond from the server to view it to the client
-        m_client.waitForReadyRead();
-        qInfo()<<"Your transaction history is :"<<m_serverrespond.toBool();
-        if(m_serverrespond.toBool() == true)
-        {
-            FieldToChange= "secondName";
-            outStream << m_request << m_role<< ok << FieldToChange;
-            qout << "secondName>>  " << Qt::endl;
-            std::cin >> secondName ;
-            SecondName=QString::fromStdString(secondName);
-            m_SecondName =SecondName;
-            outStream << SecondName;
-            m_client.waitForBytesWritten();
-            //wait for the respond from the server to view it to the client
-            m_client.waitForReadyRead();
-            qInfo()<<"Your transaction history is :"<<m_serverrespond.toBool();
-            if(m_serverrespond.toBool() == true)
-            {
-                FieldToChange = "balance";
-                outStream << m_request << m_role<< ok << FieldToChange;
-                qout << "balance>>  " << Qt::endl;
-                std::cin >> balance ;
-                Balance=QString::fromStdString(balance);
-                m_Balance=Balance;
-                outStream << Balance;
-                m_client.waitForBytesWritten();
-                //wait for the respond from the server to view it to the client
-                m_client.waitForReadyRead();
-                qInfo()<<"Your transaction history is :"<<m_serverrespond.toBool();
-                if(m_serverrespond.toBool() == true)
-                {
-                    FieldToChange = "age";
-                    outStream << m_request << m_role<< ok << FieldToChange << m_username << m_Password << m_SecondName << m_Balance;
-                    qout << "age>>  " << Qt::endl;
-                    std::cin >> age;
-                    Age=QString::fromStdString(age);
-                    m_Age = Age;
-                    outStream << m_Age;
-                    m_client.waitForBytesWritten();
-                    //wait for the respond from the server to view it to the client
-                    m_client.waitForReadyRead();
-                    qInfo()<<"Your transaction history is :"<<m_serverrespond.toBool();
-                    if(m_serverrespond.toBool() == true)
-                    {
-                        qDebug() << "user created successfully";
-                    }
-                    else
-                    {
-                        qDebug() << "User age must be from " << MIN_USR_AGE << "to " << MAX_USR_AGE;
-                        qDebug() << "user not created successfully";
-
-                    }
-                }
-                else
-                {
-                    qDebug() << "invalid balance";
-                }
-            }
-            else
-            {
-                qDebug() << "invalid secondname";
-
-            }
-        }
-        else
-        {
-            qDebug() << "password must be identical";
-
-        }
-
+        qDebug() << "user created successfully";
     }
     else
     {
-        qDebug() << "username existed choose another name";
+
+        qDebug() << "user not created successfully";
         CreateNewUser();
     }
-    // if(password == passwordagain)
-    // {
-    //     qout << "Your age>> ";
-    //     qout.flush();
-    //     qin >> age;
-    //     if(age >= MIN_USR_AGE && age <= MAX_USR_AGE )
-    //     {
-    //         qout << "your balance>> ";
-    //         qout.flush();
-    //         qin >> balance;
-    //         QTextStream stream, stream2;
-    //         stream << balance;
-    //         stream2 << age;
-    //         QString balanceString = stream.readAll();
-    //         QString ageString = stream2.readAll();
-    //         // QString fullname = firstName + " " + secondName;
-    //         // QByteArray UserData = "CreateNewUser " + firstName + " " + fullname + " " + password + " " + balanceString + " " + ageString;
-    //         //client->send_Request(UserData);
-    //     }
-    //     else
-    //     {
-    //         qDebug() << "User age must be from " << MIN_USR_AGE << "to " << MAX_USR_AGE;
-    //     }
-    // }
-    // else
-    // {
-    //     qDebug() << "password must be identical";
-    // }
 
 }
 
 void Admin::DeleteUser()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     std::string username;
     qout << "Delete user>> <username>\n"<< Qt::endl;
-    qout << "Delete user>> "<<Qt::endl;
+    qout << "User Name: "<<Qt::endl;
     std::cin >> username;
+    qout << "-----------------------------------------" << Qt::endl;
+
     QString Username=QString::fromStdString(username);
     outStream << Username;
 
@@ -343,24 +277,22 @@ void Admin::DeleteUser()
     //wait for the respond from the server to view it to the client
     m_client.waitForReadyRead();
     //get the responde from the server
-    qInfo()<<"View Account Number is:"<<m_serverrespond.toBool();
+    qInfo()<<"Delete User is:"<<m_serverrespond.toBool();
 }
 
 void Admin::UpdateUser()
 {
     QString UserInput;
-    std::string Newpassword, NewpasswordAgain, Newage, Newbalance, NewsecondName;
-    QString NewPassword, NewPasswordAgain, FieldToChange, NewAge, NewBalance, NewSecondName;
-    bool ok = true;
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
+    // std::string Newpassword, NewpasswordAgain, Newage, Newbalance, NewsecondName;
+    // QString NewPassword, NewPasswordAgain, FieldToChange, NewAge, NewBalance, NewSecondName;
+    bool ok = true, check;
     std::string Username ;
-    qout << "\n\n-----------------------------------------" <<Qt::endl;
     qout << "Update User>> <username>" << Qt::endl;
-    qout << "Update user>> " << Qt::endl;
+    qout << "User Name:" << Qt::endl;
     std::cin >> Username;
     qout << "-----------------------------------------\n" <<Qt::endl;
     QString UserName=QString::fromStdString(Username);
+    m_username = UserName;
     outStream << ok << UserName;
     m_client.waitForBytesWritten();
     //wait for the respond from the server to view it to the client
@@ -373,7 +305,7 @@ void Admin::UpdateUser()
         while(true)
         {
             qDebug() << "Choise what you want to Update For `exit` type Stop\n";
-            qDebug() << "1.Password \n2.Age \n3.Balance \n6.Full Name";
+            qDebug() << "1.Password \n2.Age \n3.Balance \n4.Full Name";
             qin >> UserInput;
             if(UserInput.toLower() == "stop")
             {
@@ -383,23 +315,8 @@ void Admin::UpdateUser()
             switch(choice)
             {
             case 1:
-                outStream << m_request << m_role<< ok;
-                FieldToChange = "password";
-                qDebug() << "Please Enter the New User password";
-                std::cin >>Newpassword;
-                qDebug() << "Please Enter the New User password again";
-                std::cin >>NewpasswordAgain;
-                NewPassword=QString::fromStdString(Newpassword);
-                NewPasswordAgain=QString::fromStdString(NewpasswordAgain);
-                outStream << UserName<< FieldToChange<< NewPassword << NewPasswordAgain;
-                qDebug() << UserName<< FieldToChange << NewPassword << NewPasswordAgain;
-
-                m_client.waitForBytesWritten();
-                //wait for the respond from the server to view it to the client
-                m_client.waitForReadyRead();
-                //get the responde from the server
-                qInfo()<<"Change User Password is:"<<m_serverrespond.toBool();
-                if(m_serverrespond.toBool() == true)
+                check = SetField("password", m_Password, ok);
+                if(check == true)
                 {
                     qDebug() << "Password updated successfuly.";
                 }
@@ -409,20 +326,8 @@ void Admin::UpdateUser()
                 }
                 break;
             case 2:
-                outStream << m_request << m_role<< ok;
-                FieldToChange = "Age";
-                qDebug() << "Please Enter the New User age";
-                std::cin >>Newage;
-                NewAge=QString::fromStdString(Newage);
-                outStream << UserName<< FieldToChange<< NewAge ;
-                qDebug() << UserName<< FieldToChange << NewAge ;
-
-                m_client.waitForBytesWritten();
-                //wait for the respond from the server to view it to the client
-                m_client.waitForReadyRead();
-                //get the responde from the server
-                qInfo()<<"Change User Age is:"<<m_serverrespond.toBool();
-                if(m_serverrespond.toBool() == true)
+                check = SetField("Age", m_Age, ok);
+                if(check == true)
                 {
                     qDebug() << "Age updated successfuly.";
                 }
@@ -433,20 +338,8 @@ void Admin::UpdateUser()
                 }
                 break;
             case 3:
-                outStream << m_request << m_role<< ok;
-                FieldToChange = "Balance";
-                qDebug() << "Please Enter the New User balace";
-                std::cin >>Newbalance;
-                NewBalance=QString::fromStdString(Newbalance);
-                outStream << UserName<< FieldToChange<< NewBalance ;
-                qDebug() << UserName<< FieldToChange << NewBalance ;
-
-                m_client.waitForBytesWritten();
-                //wait for the respond from the server to view it to the client
-                m_client.waitForReadyRead();
-                //get the responde from the server
-                qInfo()<<"Change User Balance is:"<<m_serverrespond.toBool();
-                if(m_serverrespond.toBool() == true)
+                check = SetField("Balance", m_Balance, ok);
+                if(check == true)
                 {
                     qDebug() << "Balance updated successfuly.";
                 }
@@ -456,19 +349,8 @@ void Admin::UpdateUser()
                 }
                 break;
             case 4:
-                outStream << m_request << m_role<< ok;
-                FieldToChange = "fullname";
-                qDebug() << "Please Enter the New User second name";
-                std::cin >>NewsecondName;
-                NewSecondName=QString::fromStdString(NewsecondName);
-                outStream << UserName<< FieldToChange<< NewSecondName ;
-                qDebug() << UserName<< FieldToChange << NewSecondName ;
-                m_client.waitForBytesWritten();
-                //wait for the respond from the server to view it to the client
-                m_client.waitForReadyRead();
-                //get the responde from the server
-                qInfo()<<"Change User Age is:"<<m_serverrespond.toBool();
-                if(m_serverrespond.toBool() == true)
+                check = SetField("fullname", m_SecondName, ok);
+                if(check == true)
                 {
                     qDebug() << "Full name updated successfuly.";
                 }
@@ -482,7 +364,7 @@ void Admin::UpdateUser()
                 break;
 
             }
-            qDebug() << "Do you want to continue? type `stop` to exit:";
+            qDebug() << "Do you want to continue? (type `stop` to exit/ `y` to continue):";
             qin >> UserInput;
             if(UserInput.toLower() == "stop")
             {
@@ -498,8 +380,6 @@ void Admin::UpdateUser()
 }
 void Admin::sendrequesttoserver(QString request)
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     outStream<<request<<m_role;
     m_request=request;
 
@@ -584,8 +464,6 @@ void Admin::stateChanged(QAbstractSocket::SocketState socketstate)
 
 void Admin::readyRead()
 {
-    QDataStream inStream(&m_client);
-    inStream.setVersion(QDataStream::Qt_6_6);
     if(m_request=="login")
     {
         bool respond;

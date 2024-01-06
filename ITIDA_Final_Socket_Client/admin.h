@@ -19,6 +19,8 @@ public:
     void CreateNewUser();
     void DeleteUser();
     void UpdateUser();
+    bool SetField(const QString& field, QString& value, bool& ok);
+
 
     //login class
     bool SystemLogIn();
