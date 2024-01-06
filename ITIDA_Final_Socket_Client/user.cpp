@@ -1,7 +1,10 @@
 #include "user.h"
 
 User::User(): qin(stdin), cout(stdout) {
-    //client = new Client_socket();
+    outStream.setDevice(&m_client);
+    inStream.setDevice(&m_client);
+    inStream.setVersion(QDataStream::Qt_6_6);
+    outStream.setVersion(QDataStream::Qt_6_6);
     m_role="user";
     connect(&m_client,&QTcpSocket::connected,this,&User::connected);
     connect(&m_client,&QTcpSocket::disconnected,this,&User::disconnected);
@@ -23,30 +26,23 @@ quint16 User::showOptions()
     qInfo() << "6- View Account";
     qInfo() << "7- Exit Program";
     qInfo() << "===================================================";
-
-    cout << "User: ";
-    cout.flush();
+    cout << "User: " << Qt::endl;
     qin >> userchoise;
+    qInfo() << "===================================================";
     return userchoise;
 }
 
 bool User::SystemLogIn()
 {
     m_request = "login";
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     outStream<<m_request<<m_role;
     std::string username, password;
-    // QString username, password;
-
     cout << "login>> <username> <password>" << Qt::endl;
-    cout << "Username: " << Qt::endl;
-    // cout.flush();
-    std::cin >> username >> password;
-    // username = qin.readLine();
-    // cout << "Username: " << Qt::endl;
-    // password = qin.readLine();
-
+    cout << "User Name: " << Qt::endl;
+    std::cin >> username ;
+    cout << "-----------------------------------------" << Qt::endl;
+    cout << "Password: " << Qt::endl;
+    std::cin >> password ;
     quint8 counter = 0;
     bool ok = false;
     QString Username=QString::fromStdString(username);
@@ -74,6 +70,8 @@ bool User::SystemLogIn()
         if(m_serverrespond.toBool() == true)
         {
             m_username = Username;
+            cout << "-----------------------------------------" << Qt::endl;
+
             sendrequesttoserver("GetAccountNumber");
         }
     }
@@ -102,37 +100,26 @@ bool User::CheckAccountNumber(QString accountnumber)
 
 void User::ViewAccountBalance()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
-    if(CheckAccountNumber(m_accountnumber))
+
+    outStream << m_username;
+    m_client.waitForBytesWritten();
+    //wait for the respond from the server to view it to the client
+    m_client.waitForReadyRead();
+    if(m_serverrespond.toBool() == true)
     {
-        outStream << m_username;
-        m_client.waitForBytesWritten();
-        //wait for the respond from the server to view it to the client
-        m_client.waitForReadyRead();
-        if(m_serverrespond.toBool() == true)
-        {
-            qInfo()<<"Your account balance is :"<<m_accountBalance;
-        }
-        else
-        {
-            qInfo()<<"Your account balance is not found";
-        }
+        qInfo()<<"Your account balance is :"<<m_accountBalance;
     }
     else
     {
-        qInfo() << "Invalid account number please try again";
+        qInfo()<<"Your account balance is not found";
     }
 }
 
 void User::ViewTransactionHistory()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
-    // QString accountnumber;
     std::string count;
-    qInfo() << "View Transaction History <accountnumber> <count> ";
-    qInfo() << "Transaction History>> ";
+    cout << "View Transaction History <count> " << Qt::endl;
+    cout << "Count: " <<Qt::endl;
     std::cin >> count;
     QString Count=QString::fromStdString(count);
 
@@ -156,41 +143,37 @@ void User::ViewTransactionHistory()
 }
 void User::Get_Account_number()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
-
-    cout << "Get Account Number <username>" << Qt::endl;
-    qInfo() << "getting account number";
-
     //send request to server to get data
     outStream << m_username;
     m_client.waitForBytesWritten();
     m_client.waitForReadyRead();
 
     //get the response from the server & check on it
-
     if(m_serverrespond.toBool() == true)
     {
+
         qInfo()<<"Your Account number is :"<<m_accountnumber;
+
     }
     else
     {
+
         qInfo()<<"Your Account number is not found please try again";
+
     }
 }
 
 void User::Make_Transaction()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
-
     std::string transaction_amount, transactiontype;
-    cout << "for in transaktion type in for out type out" << Qt::endl;
+    cout << "For in transaktion type `in` for out type `out`" << Qt::endl;
     std::cin >> transactiontype;
+    cout << "-----------------------------------------" << Qt::endl;
+
     cout << "Make Transaction>> <transaction amount>" << Qt::endl;
     cout << "Transaction Amount>> " << Qt::endl;
-
     std::cin  >> transaction_amount;
+    cout << "-----------------------------------------" << Qt::endl;
 
     QString TransactionAmount=QString::fromStdString(transaction_amount);
     QString Transactiontype=QString::fromStdString(transactiontype);
@@ -218,14 +201,12 @@ void User::Make_Transaction()
 
 void User::Transfer_Amount()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     std::string to_Username, transfer_amount;
-    // quint32 transfer_amount;
-    // cout << "Transfer Amount>> <to_Username> <transfer amount>" << Qt::endl;
     cout << "Transfer Amount>> <to_Username> <transfer amount>" << Qt::endl;
     cout << "to_Username>> " << Qt::endl;
     std::cin >> to_Username;
+    cout << "-----------------------------------------" << Qt::endl;
+
     bool ok = true;
     QString To_accountnumber=QString::fromStdString(to_Username);
     outStream <<ok << m_username << To_accountnumber;
@@ -237,8 +218,12 @@ void User::Transfer_Amount()
     {
         bool check = false;
         outStream<<m_request<<m_role<< check;
+        cout << "-----------------------------------------" << Qt::endl;
+
         cout << "Transfer amount>> " << Qt::endl;
         std::cin >> transfer_amount;
+        cout << "-----------------------------------------" << Qt::endl;
+
         QString Transfer_amount=QString::fromStdString(transfer_amount);
         outStream << m_username <<To_accountnumber <<Transfer_amount;
         m_client.waitForBytesWritten();
@@ -263,19 +248,16 @@ void User::Transfer_Amount()
 
 void User::ViewAccount()
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     cout << "View account>>" << Qt::endl;
     outStream << m_username;
     m_client.waitForBytesWritten();
     m_client.waitForReadyRead();
     cout <<"ViewAccount:\n"<< "{\n" << m_serverrespond.toString() << "\n}" << Qt::endl;
+
 }
 
 void User::sendrequesttoserver(QString request)
 {
-    QDataStream outStream(&m_client);
-    outStream.setVersion(QDataStream::Qt_6_6);
     outStream<<request<<m_role;
     m_request=request;
 
@@ -355,15 +337,12 @@ void User::stateChanged(QAbstractSocket::SocketState socketstate)
 
 void User::readyRead()
 {
-    QDataStream inStream(&m_client);
-    inStream.setVersion(QDataStream::Qt_6_6);
-
     if ( m_request =="ViewAccount")
     {
-        QString Account;
+        QString respond;
         //take the money in the account from the server and save it in the server respond
-        inStream>>Account;
-        m_serverrespond.setValue(Account);
+        inStream>>respond;
+        m_serverrespond.setValue(respond);
     }
     else if(m_request=="TransferAmount"||m_request=="MakeTransaction")
     {
