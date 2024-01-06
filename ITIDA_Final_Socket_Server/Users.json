@@ -2,21 +2,35 @@
     "Alaa": {
         "Account Number": "1",
         "Age": "25",
-        "Balance": "23000",
-        "fullname": "Alaa Eldaly",
-        "password": "Alaa12345"
+        "Balance": "200000",
+        "fullname": "Alaa Mahmoud",
+        "password": "3loly"
     },
     "Ghada": {
         "Account Number": "310129",
         "Age": "23",
-        "Balance": "23030",
+        "Balance": "197000",
         "fullname": "Ghada Gomaa",
-        "password": "Ghaza"
+        "password": "Ghada123"
+    },
+    "Gharam": {
+        "Account Number": "1",
+        "Age": "27",
+        "Balance": "200000",
+        "fullname": "Gharam Ashraf",
+        "password": "3009"
+    },
+    "Mona": {
+        "Account Number": "3",
+        "Age": "19",
+        "Balance": "1200",
+        "fullname": "Mona Sallam",
+        "password": "Mona123"
     },
     "Rana": {
         "Account Number": "310011",
         "Age": "24",
-        "Balance": "8900",
+        "Balance": "9100",
         "fullname": "Rana Ali",
         "password": "Rana123"
     }
