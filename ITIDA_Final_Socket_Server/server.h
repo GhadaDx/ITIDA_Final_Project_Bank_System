@@ -33,6 +33,9 @@ public slots:
 private:
     QTcpServer server;
     static quint32 counter;
+    QString m_path;
+    QString m_historyfile;
+    QString m_usersfile, m_adminsfile;
 
 
 };
