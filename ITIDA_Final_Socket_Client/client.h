@@ -19,20 +19,20 @@ public:
     virtual bool CheckAccountNumber(QString accountnumber)=0;
     virtual void ViewAccountBalance()=0;
     virtual void ViewTransactionHistory()=0;
-    // bool SystemLogIn(QString role)=0;
-    // bool CheckAccountNumber(QString accountnumber)=0;
-    // void ViewAccountBalance()=0;
-    // void ViewTransactionHistory()=0;
+
 
 
 signals:
 
 protected:
+    QDataStream outStream;
+    QDataStream inStream;
     QString m_role;
     QString m_request;
     QVariant m_serverrespond;
     quint32 m_accountBalance;
     QString m_accountnumber;
+    // QVariant m_respond;
 };
 
 #endif // CLIENT_H
