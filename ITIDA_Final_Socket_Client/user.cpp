@@ -135,10 +135,6 @@ void User::ViewTransactionHistory()
         //wait for the respond from the server to view it to the client
         m_client.waitForReadyRead();
         qDebug().noquote() <<"Your transaction history is :"<<m_serverrespond.toString();
-
-        // QByteArray History = "ViewTransactionHistory " + accountnumber + " " + count;
-        // client->send_Request(History);
-        //qDebug() << "Account Balance is: " << response;
     }
 }
 void User::Get_Account_number()
