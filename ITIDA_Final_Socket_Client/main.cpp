@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
             clearScreen();
 
             User usr;
-            usr.connectToHost(QHostAddress::LocalHost, 1234);
+            usr.connectToHost(QHostAddress::LocalHost, 2020);
             isLoggedIn = usr.SystemLogIn();
             while(isLoggedIn == true)
             {
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
         {
             clearScreen();
             Admin admin;
-            admin.connectToHost(QHostAddress::LocalHost, 1234);
+            admin.connectToHost(QHostAddress::LocalHost, 2020);
             isLoggedIn = admin.SystemLogIn();
             while(isLoggedIn == true)
             {
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
                 }
                 qInfo() << "===================================================\n";
                 qDebug() << "Do you want to continue? (type `exit` to quit/ `y` to continue):";
-                qInfo() << "User:";
+                qInfo() << "Admin:";
                 qin >> userInput;
                 if(userInput.toLower() == "exit")
                 {
