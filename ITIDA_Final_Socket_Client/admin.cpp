@@ -37,6 +37,7 @@ bool Admin::SystemLogIn()
     m_request = "login";
     outStream<<m_request<<m_role;
     std::string adminName, password;
+    qInfo() << "===================================================";
     qout <<"login>> <username> <password>\n";
     qout << "Admin: " << Qt::endl;
     std::cin >> adminName ;
@@ -92,6 +93,7 @@ bool Admin::CheckAccountNumber(QString accountnumber)
 void Admin::ViewAccountBalance()
 {
     std::string username;
+    qInfo() << "===================================================";
     qout << "view Account Balance <User Name>" << Qt::endl;
     qInfo() << "User Name: " << Qt::endl;
     std::cin >> username;
@@ -116,6 +118,7 @@ void Admin::ViewAccountBalance()
 void Admin::ViewTransactionHistory()
 {
     std::string count, username;
+    qInfo() << "===================================================";
     qout << "View Transaction History <username> <count>" << Qt::endl;
     qout << "username:" << Qt::endl;
     std::cin >> username;
@@ -144,6 +147,7 @@ void Admin::ViewTransactionHistory()
 void Admin::GetAccountnumber()
 {
     std::string m_usrname;
+    qInfo() << "===================================================";
     qout << "Get Account Number: <username>";
     qout << "username: "<< Qt::endl;
     std::cin  >> m_usrname;
@@ -173,6 +177,7 @@ void Admin::ViewBankDatabase()
     //wait for the respond from the server to view it to the client
     m_client.waitForReadyRead();
     //get the responde from the server
+    qInfo() << "===================================================";
     qInfo()<<"View Data Base is:"<<m_serverrespond.toBool();
     if(m_serverrespond.toBool() == true)
     {
@@ -187,13 +192,13 @@ bool Admin::SetField(const QString& field, QString& value, bool& ok) {
     // Send a request to the server to set the specified field
     std::string newvalue;
     outStream << m_request << m_role << ok << field << m_username;
+    qInfo() << "===================================================";
     qout << field << " >>  " << Qt::endl;
     std::cin >> newvalue;
     qout << "-----------------------------------------" << Qt::endl;
     if(field == "password")
     {
         std::string passwordagain;
-        qout << "\n-----------------------------------------" << Qt::endl;
         qout <<"Password again>> " << Qt::endl;
         std::cin >> passwordagain;
         qout << "-----------------------------------------" << Qt::endl;
@@ -220,8 +225,7 @@ void Admin::CreateNewUser()
     QString FieldToChange;
     bool ok= true;
     std::string firstName;
-    // std::string secondName, password, passwordagain, balance, age;
-    // QString Password, Passwordagain, SecondName, Balance, Age;
+    qInfo() << "===================================================";
     qout << "User Name:" << Qt::endl;
     std::cin >> firstName ;
     qout << "-----------------------------------------" << Qt::endl;
@@ -265,6 +269,7 @@ void Admin::CreateNewUser()
 void Admin::DeleteUser()
 {
     std::string username;
+    qInfo() << "===================================================";
     qout << "Delete user>> <username>\n"<< Qt::endl;
     qout << "User Name: "<<Qt::endl;
     std::cin >> username;
@@ -283,8 +288,7 @@ void Admin::DeleteUser()
 void Admin::UpdateUser()
 {
     QString UserInput;
-    // std::string Newpassword, NewpasswordAgain, Newage, Newbalance, NewsecondName;
-    // QString NewPassword, NewPasswordAgain, FieldToChange, NewAge, NewBalance, NewSecondName;
+    qInfo() << "===================================================";
     bool ok = true, check;
     std::string Username ;
     qout << "Update User>> <username>" << Qt::endl;

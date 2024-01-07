@@ -4,6 +4,21 @@
 #include <QDataStream>
 #include "user.h"
 #include "admin.h"
+
+
+#if defined(Q_OS_WIN)
+#include <windows.h>
+#elif defined(Q_OS_UNIX)
+#include <unistd.h>
+#endif
+
+void clearScreen() {
+#if defined(Q_OS_WIN)
+    system("cls");
+#elif defined(Q_OS_UNIX)
+    system("clear");
+#endif
+}
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -19,7 +34,6 @@ int main(int argc, char *argv[])
 
     while(true)
     {
-
         qout << "bank>> " << Qt::endl;
         userInput = qin.readLine();
 
@@ -30,6 +44,8 @@ int main(int argc, char *argv[])
         }
         else if(userInput.toLower() == "user")
         {
+            clearScreen();
+
             User usr;
             usr.connectToHost(QHostAddress::LocalHost, 1234);
             isLoggedIn = usr.SystemLogIn();
@@ -37,37 +53,32 @@ int main(int argc, char *argv[])
             {
                 //show the valid commands for user to choose one
                 Choise = usr.showOptions();
+                clearScreen();
                 switch(Choise)
                 {
                 case 1:
                     request = "GetAccountNumber";
                     usr.sendrequesttoserver( request);
-                    //usr.Get_Account_number();
                     break;
                 case 2:
                     request = "AccountBalance";
                     usr.sendrequesttoserver( request);
-                    //usr.ViewAccountBalance();
                     break;
                 case 3:
                     request = "TransactionHistory";
                     usr.sendrequesttoserver( request);
-                    // usr.ViewTransactionHistory();
                     break;
                 case 4:
                     request = "MakeTransaction";
                     usr.sendrequesttoserver( request);
-                    // usr.Make_Transaction();
                     break;
                 case 5:
                     request = "TransferAmount";
                     usr.sendrequesttoserver( request);
-                    //usr.Transfer_Amount();
                     break;
                 case 6:
                     request = "ViewAccount";
                     usr.sendrequesttoserver( request);
-                    // usr.ViewAccount();
                     break;
                 case 7:
                     qInfo() <<  " Exit Program";
@@ -77,54 +88,55 @@ int main(int argc, char *argv[])
                     qDebug() << "Invalid choise please try again.";
                     break;
                 }
+                qInfo() << "===================================================";
+                qDebug() << "Do you want to continue? (type `exit` to quit/ `y` to continue):";
+                qInfo() << "User:";
+                qin >> userInput;
+                if(userInput.toLower() == "exit")
+                {
+                    break;
+                }
             }
         }
         else if(userInput.toLower() == "admin")
         {
+            clearScreen();
             Admin admin;
             admin.connectToHost(QHostAddress::LocalHost, 1234);
-
             isLoggedIn = admin.SystemLogIn();
             while(isLoggedIn == true)
             {
-
                 Choise = admin.showOptions();
+                clearScreen();
                 switch(Choise)
                 {
                 case 1:
                     request = "GetAccountNumber";
                     admin.sendrequesttoserver( request);
-                    // admin.GetAccountnumber();
                     break;
                 case 2:
                     request = "AccountBalance";
                     admin.sendrequesttoserver( request);
-                    //admin.ViewAccountBalance();
                     break;
                 case 3:
                     request = "ViewTransactionHistory";
                     admin.sendrequesttoserver( request);
-                    //admin.ViewTransactionHistory();
                     break;
                 case 4:
                     request = "ViewBankDatabase";
                     admin.sendrequesttoserver( request);
-                    //admin.ViewBankDatabase();
                     break;
                 case 5:
                     request = "CreateNewUser";
                     admin.sendrequesttoserver( request);
-                    // admin.CreateNewUser();
                     break;
                 case 6:
                     request = "DeleteUser";
                     admin.sendrequesttoserver( request);
-                    // admin.DeleteUser();
                     break;
                 case 7:
                     request = "UpdateUser";
                     admin.sendrequesttoserver( request);
-                    // admin.UpdateUser();
                     break;
                 case 8:
                     qInfo() <<  " Exit Program";
@@ -132,6 +144,14 @@ int main(int argc, char *argv[])
                     break;
                 default:
                     qDebug() << "Invalid choise please try again.";
+                    break;
+                }
+                qInfo() << "===================================================\n";
+                qDebug() << "Do you want to continue? (type `exit` to quit/ `y` to continue):";
+                qInfo() << "User:";
+                qin >> userInput;
+                if(userInput.toLower() == "exit")
+                {
                     break;
                 }
             }
