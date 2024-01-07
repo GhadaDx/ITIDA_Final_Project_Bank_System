@@ -78,67 +78,10 @@ bool JsonHandler::checkOnObject(const QString& filename, const QString& keyValue
     return false;  // Authentication failed
 }
 
-// bool JsonHandler::EditKeyValue(const QString &fileName, const QString &ObjectKey, const QString &NewValue)
-// {
-//         // read json file
-//         QFile file(fileName);
 
-//         if (file.open(QIODevice::ReadOnly | QIODevice::Text) )
-//         {
-//             //Parse the JSON document from the file
-//             QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
-//             file.close();
-
-//             // Check if the JSON document is an object
-//             if(!jsonDoc.isNull() && jsonDoc.isObject())
-//             {
-//                 // Create a new json object and save the old json object in it
-//                 QJsonObject jsonObj = jsonDoc.object();
-
-//                 // Check if the specified object key exists and is an object
-//                 if ( jsonObj.contains(ObjectKey) && jsonObj[ObjectKey].isObject() )
-//                 {
-//                     if(ObjectKey != NewValue)
-//                     {
-//                     QJsonObject oldObject = jsonObj[ObjectKey].toObject();
-//                     jsonObj.remove(ObjectKey);
-//                     // Update the original json object in the main json file
-//                     jsonObj[NewValue] = oldObject ;
-//                     }
-//                     else
-//                     {
-//                         return false;
-
-//                     }
-
-//                     // write the modifited json object to the main json file
-//                     if( file.open(QIODevice::WriteOnly | QIODevice::Text) )
-//                     {
-//                         QJsonDocument modifiedJsonDoc(jsonObj);
-//                         file.write(modifiedJsonDoc.toJson());
-//                         file.close();
-//                         qDebug() << "Field updated successfully.";
-//                         return true;
-//                     }else {
-//                         qDebug() << "Error: Unable to open the file for writing.";
-//                     }
-//                 }else {
-//                     qDebug() << "Error: Object key not found or not an object.";
-//                 }
-
-
-//             } else {
-//                 qDebug() << "Error: Invalid JSON document.";
-//             }
-//         }else {
-//             qWarning() << "Failed to open file for reading:" << file.errorString();
-//         }
-//         return false;
-
-// }
 bool JsonHandler::printObjectFields(const QString &fileName, const QString &objectName, const QString &request, QString &respond)
 {
-    bool ok =false;
+    // bool ok =false;
     QFile file(fileName);
     if ( file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
         QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
@@ -151,8 +94,9 @@ bool JsonHandler::printObjectFields(const QString &fileName, const QString &obje
             if (jsonObject.contains(objectName) ) {
                 QJsonObject targetObject = jsonObject.value(objectName).toObject();
 
-                ok = true;
+                // ok = true;
                 respond = targetObject[request].toString();
+                return true;
 
             } else {
                 qWarning() << "Object with name" << objectName << "not found in the JSON file.";
@@ -163,7 +107,7 @@ bool JsonHandler::printObjectFields(const QString &fileName, const QString &obje
     } else {
         qWarning() << "Failed to open file for reading:" << file.errorString();
     }
-    return ok;
+    return false;
 }
 
 QString JsonHandler::ViewUserField(const QString &fileName, const QString &objectName)
@@ -199,91 +143,10 @@ QString JsonHandler::ViewUserField(const QString &fileName, const QString &objec
     } else {
         qWarning() << "Failed to open file for reading:" << file.errorString();
     }
-    return "error";
+    return "Can't find the Account";
 
 }
 
-// bool Server::GetField(const QString &filename,const QString &Username, const QString &field,const QString& fieldValue)
-// {
-//      QFile file(filename);
-//     // Load JSON file
-//     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-//         qDebug() << "Error: Can't open the DataBase file";
-//         return false;
-//     }
-
-//     // Read JSON data
-//     QByteArray jsonData = file.readAll();
-//     file.close();
-
-//     // Parse JSON
-//     QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-//     if (jsonDoc.isNull()) {
-//         qDebug() << "Error: Failed to parse JSON data";
-//         return false;
-//     }
-
-//     // Check if the root element is an object
-//     if (!jsonDoc.isObject()) {
-//         qDebug() << "Error: JSON data is not an object";
-//         return false;
-//     }
-
-
-//     QJsonObject m_Users = jsonDoc.object();
-
-//     if(m_Users.contains(Username)&&m_Users[Username].isObject())
-//     {
-//         QJsonObject userObject = m_Users[Username].toObject();
-//         fieldValue=userObject[field].toString();
-//         return true;  // Authentication successful
-//     }
-//     return false;
-
-// }
-// void Server::getbalance(const QString &fileName, const QString &objectName)
-// {
-//     //create pointer to the socket connected to the object send the request
-//     QTcpSocket* socket=qobject_cast<QTcpSocket*>(sender());
-//     //create an out datastream to send the respond to the client
-//     QDataStream outStream(socket);
-//     // QTextStream stream(socket);
-//     outStream.setVersion(QDataStream::Qt_6_6);
-//     bool ok =false;
-//     QString balance;
-//     QFile file(fileName);
-//     if ( file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
-//         QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
-//         file.close();
-
-//         if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-//             QJsonObject jsonObject = jsonDoc.object();
-
-//             // Check if the specified objectName exists
-//             if (jsonObject.contains(objectName) ) {
-//                 QJsonObject targetObject = jsonObject.value(objectName).toObject();
-
-//                 // Print the fields of the specified object
-//                 // qDebug() << "Fields of" << objectName << ":";
-//                 // qDebug() << "Age:" << targetObject["age"].toString();
-//                 // qDebug() << "City:" << targetObject["city"].toString();
-//                 // qDebug() << "Name:" << targetObject["name"].toString();
-//                 ok = true;
-//                 balance = targetObject["Balance"].toString();
-
-//             } else {
-//                 qWarning() << "Object with name" << objectName << "not found in the JSON file.";
-//                 ok = false;
-//                 balance = "error";
-//             }
-//         } else {
-//             qWarning() << "Failed to parse JSON data from" << fileName;
-//         }
-//     } else {
-//         qWarning() << "Failed to open file for reading:" << file.errorString();
-//     }
-//     outStream << ok << balance;
-// }
 
 bool JsonHandler::PrintAllDb(const QString &fileName, QString &DataBase)
 {
@@ -322,114 +185,6 @@ bool JsonHandler::PrintAllDb(const QString &fileName, QString &DataBase)
     return false;
 
 }
-
-
-
-// bool Server::searchKeyInJsonDocument(const QString& fileName, const QString& targetKey) {
-//     QFile file(fileName);
-
-//     if (file.open(QIODevice::ReadOnly | QIODevice::Text) )
-//     {
-//         //Parse the JSON document from the file
-//         QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
-//         file.close();
-
-//         // Check if the JSON document is an object
-//         if(!jsonDoc.isNull() && jsonDoc.isObject())
-//         {
-//             // Create a new json object and save the old json object in it
-//             if (jsonDoc.isObject()) {
-//                 QJsonObject jsonObj = jsonDoc.object();
-
-//                 // Check if the target key exists in the root object
-//                 if (jsonObj.contains("Account Number")&& jsonObj["Account Number"].toString() == targetKey) {
-//                     QJsonObject TheNewObject = jsonObj;
-
-//                     if(jsonObj.contains("Balance"))
-//                     {
-//                         QString NewValue = jsonObj["Balance"].toString();
-//                         TheNewObject["Balanc"] = NewValue;
-
-//                         // Update the original json object in the main json file
-//                         jsonObj = TheNewObject ;
-//                         // write the modifited json object to the main json file
-//                         if( file.open(QIODevice::WriteOnly | QIODevice::Text) )
-//                         {
-//                             QJsonDocument modifiedJsonDoc(jsonObj);
-//                             file.write(modifiedJsonDoc.toJson());
-//                             file.close();
-//                             qDebug() << "Field updated successfully.";
-//                         }else {
-//                             qDebug() << "Error: Unable to open the file for writing.";
-//                         }
-//                     }
-//                     qDebug() << "Found the target key in the root object.";
-//                     return true;
-//                 }
-
-//                 // Iterate through each key-value pair in the root object
-//                 for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it) {
-//                     // If the value is an object, recursively search within it
-//                     if (it.value().isObject()) {
-//                         QJsonDocument subDoc(it.value().toObject());
-//                         if (searchKeyInJsonDocument(subDoc, targetKey)) {
-//                             return true;
-//                         }
-//                     }
-//                 }
-//             }
-//         }else
-//         {
-//             qDebug() << "Error: Invalid JSON document.";
-//         }
-//     }else
-//     {
-//         qWarning() << "Failed to open file for reading:" << file.errorString();
-//     }
-//----------------------------------------
-// if (jsonDoc.isObject()) {
-//     QJsonObject jsonObj = jsonDoc.object();
-
-//     // Check if the target key exists in the root object
-//     if (jsonObj.contains("Account Number")&& jsonObj["Account Number"].toString() == targetKey) {
-//         QJsonObject TheNewObject = jsonObj;
-
-//         if(jsonObj.contains("Balance"))
-//         {
-//             QString NewValue = jsonObj["Balance"].toString();
-//             TheNewObject["Balanc"] = NewValue;
-
-//             // Update the original json object in the main json file
-//             jsonObj = TheNewObject ;
-//             // write the modifited json object to the main json file
-//             if( file.open(QIODevice::WriteOnly | QIODevice::Text) )
-//             {
-//                 QJsonDocument modifiedJsonDoc(jsonObj);
-//                 file.write(modifiedJsonDoc.toJson());
-//                 file.close();
-//                 qDebug() << "Field updated successfully.";
-//             }else {
-//                 qDebug() << "Error: Unable to open the file for writing.";
-//             }
-//         }
-//         qDebug() << "Found the target key in the root object.";
-//         return true;
-//     }
-
-//     // Iterate through each key-value pair in the root object
-//     for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it) {
-//         // If the value is an object, recursively search within it
-//         if (it.value().isObject()) {
-//             QJsonDocument subDoc(it.value().toObject());
-//             if (searchKeyInJsonDocument(subDoc, targetKey)) {
-//                 return true;
-//             }
-//         }
-//     }
-// }
-
-//     return false;  // Target key not found
-// }
 
 bool JsonHandler::EditSpecifcField(const QString &fileName, const QString &ObjectKey, const QString &FieldToChange, const QString &NewValue)
 {
@@ -507,7 +262,7 @@ bool JsonHandler::updateOrCreateJsonFile(const QString& filename, const QString 
                     {
                         if(balance.toInt() + Amount >= 0)
                         {
-                            ok = SaveTransaction( filename, username,amount);
+                            ok = SetHistory( filename, username,amount);
 
                             if(ok == true)
                             {
@@ -530,7 +285,7 @@ bool JsonHandler::updateOrCreateJsonFile(const QString& filename, const QString 
                     }
                     else
                     {
-                        ok = SaveTransaction( filename, username,amount);
+                        ok = SetHistory( filename, username,amount);
                         if(ok == true)
                         {
                             qint32 NewBalance = balance.toInt() + Amount;
@@ -587,7 +342,7 @@ QString JsonHandler::ViewTransactionHistory(const QString &fileName, const QStri
         result = "Error: Failed to parse JSON data ";
     }
 
-    // Check if the root element is an object
+    // Check if the JSON document is an object
     if (!jsonDoc.isObject()) {
         result = "Error: JSON data is not an object";
     }
@@ -611,13 +366,13 @@ QString JsonHandler::ViewTransactionHistory(const QString &fileName, const QStri
             result += QJsonDocument(jsonObject).toJson(QJsonDocument::Indented);
 
         }
-        qDebug() << "get history successfully";
+        qDebug() << "Get history successfully";
         // return result;
 
     }
     return result;
 }
-bool JsonHandler::SaveTransaction(QString fileName, QString username, const QString &amount)
+bool JsonHandler::SetHistory(QString fileName, QString username, const QString &amount)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
@@ -648,7 +403,7 @@ bool JsonHandler::SaveTransaction(QString fileName, QString username, const QStr
     {
         // QJsonObject  userObject = usersObject[username].toObject();
 
-        qDebug() << "user exists";
+        qDebug() << "User exists";
     }
     else
     {
@@ -681,7 +436,6 @@ bool JsonHandler::SaveTransaction(QString fileName, QString username, const QStr
 bool  JsonHandler::AddNewObject(const QString &fileName, QVariantMap newObject,const QString& NewObjectName)
 {
 
-    bool ok = false;
     QFile file(fileName);
     //Check for opening the file in Read only mode && as Text file
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -824,143 +578,3 @@ bool JsonHandler::deleteObject(const QString &filePath, const QString &objectKey
     }
     return false;
 }
-
-
-
-
-
-
-bool JsonHandler::createEmptyJsonObject(const QString& filename, const QString& key)
-{
-    // Create an empty JSON object
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text) )
-    {
-        qDebug() << "Error: Unable to open the file for reading.";
-        // return;
-    }
-    // Set a key in the JSON object
-    // key = QJsonObject(); // Set an empty value for the specified key
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
-    if (jsonDoc.isObject())
-    {
-        QJsonObject jsonObject = jsonDoc.object();
-        jsonObject[key] = QJsonObject();
-
-        // Create a JSON document and set the JSON object
-        QJsonDocument jsonDocument(jsonObject);
-        // Open the file for writing
-
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-            // Write the JSON document to the file
-            file.write(jsonDocument.toJson());
-
-            // Close the file
-            file.close();
-            return true;
-        }
-        else
-        {
-            qWarning() << "Failed to open the file for writing:" << file.errorString();
-        }
-
-    }
-
-
-    return false;
-}
-// void Server::updateJsonHistoryFile(const QList<QPair<QString, quint32>>& newData, const QString& filename)
-// {
-
-//     // // Create a QFile object
-//     //QFile file(filename);
-//     if(createJsonFile( filename))\{
-
-//         }
-
-//     // Check if the file can be opened
-//     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-//         qDebug() << "File opened successfully.";
-
-//         // Read existing data from the file
-//         QList<QPair<QString, quint32>> existingData = readJsonFile(filename);
-
-//         // Append new data to the existing data
-//         existingData.append(newData);
-
-//         // Create a JSON array and populate it with the combined data
-//         QJsonArray jsonArray;
-//         for (const auto& pair : existingData) {
-//             QJsonObject jsonObject;
-//             jsonObject["data"] = pair.first;
-//             jsonObject["amount"] = pair.second;
-//             jsonArray.append(jsonObject);
-//         }
-
-//         // Create a JSON document and set the array as its root
-//         QJsonDocument jsonDocument(jsonArray);
-
-//         // Write the updated JSON document back to the file
-//         QFile file(filename);
-//         if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-//             file.write(jsonDocument.toJson());
-//             file.close();
-//             qDebug() << "JSON file updated successfully.";
-//         } else {
-//             qDebug() << "Error: Cannot update JSON file.";
-//         }
-//         file.close();
-//     } else {
-//         qDebug() << "Error: Unable to open the file.";
-//     }
-
-// }
-// bool createJsonFile(const QString& filename) {
-//     // Check if the file already exists
-//     if (QFile::exists(filename)) {
-//         qDebug() << "Error: File already exists.";
-//         return false;
-//     }
-//     else
-//     {
-//         return true
-//     }
-// }
-
-// QString printAccountnumber(const QString &fileName, const QString &objectName)
-// {
-//     QFile file(fileName);
-//     if ( file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
-//         QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
-//         file.close();
-
-//         if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-//             QJsonObject jsonObject = jsonDoc.object();
-
-//             // Check if the specified objectName exists
-//             if (jsonObject.contains(objectName)) {
-//                 QJsonObject targetObject = jsonObject.value(objectName).toObject();
-
-//                 // Print the fields of the specified object
-//                 // qDebug() << "Fields of" << objectName << ":";
-//                 // qDebug() << "Age:" << targetObject["age"].toString();
-//                 // qDebug() << "City:" << targetObject["city"].toString();
-//                 // qDebug() << "Name:" << targetObject["name"].toString();
-//                 qDebug() << "Account Number:" << targetObject["Account Number"].toString();
-//                 return targetObject["Account Number"].toString();
-
-//             } else {
-//                 qWarning() << "Object with name" << objectName << "not found in the JSON file.";
-//                 return "error";
-//             }
-//         } else {
-//             qWarning() << "Failed to parse JSON data from" << fileName;
-//             return "error";
-//         }
-//     } else {
-//         qWarning() << "Failed to open file for reading:" << file.errorString();
-//         return "error";
-//     }
-
-// }
