@@ -1,23 +1,16 @@
 {
-    "Calaza": {
-        "Account Number": "1746610854",
-        "Age": "21",
-        "Balance": "12000",
-        "fullname": "Calaza Ashraf",
-        "password": "Calaza123"
-    },
     "Ghada": {
         "Account Number": "310129",
         "Age": "23",
-        "Balance": "203000",
+        "Balance": "202800",
         "fullname": "Ghada Gomaa",
         "password": "Ghada123"
     },
     "Rana": {
-        "Account Number": "310011",
+        "Account Number": "281481647",
         "Age": "24",
         "Balance": "12000",
         "fullname": "Rana Ali",
-        "password": "Ranon"
+        "password": "Rana123"
     }
 }
