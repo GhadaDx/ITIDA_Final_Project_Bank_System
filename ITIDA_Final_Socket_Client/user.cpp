@@ -37,6 +37,7 @@ bool User::SystemLogIn()
     m_request = "login";
     outStream<<m_request<<m_role;
     std::string username, password;
+    qInfo() << "===================================================";
     cout << "login>> <username> <password>" << Qt::endl;
     cout << "User Name: " << Qt::endl;
     std::cin >> username ;
@@ -85,8 +86,6 @@ bool User::SystemLogIn()
 
 bool User::CheckAccountNumber(QString accountnumber)
 {
-    // bool ok;
-    // quint32 AccountNumber = accountnumber.toInt(&ok);
     if( accountnumber.toInt() <= 0)
     {
         qInfo() << "Invalid Account Number!";
@@ -100,7 +99,7 @@ bool User::CheckAccountNumber(QString accountnumber)
 
 void User::ViewAccountBalance()
 {
-
+    qInfo() << "===================================================";
     outStream << m_username;
     m_client.waitForBytesWritten();
     //wait for the respond from the server to view it to the client
@@ -118,6 +117,7 @@ void User::ViewAccountBalance()
 void User::ViewTransactionHistory()
 {
     std::string count;
+    qInfo() << "===================================================";
     cout << "View Transaction History <count> " << Qt::endl;
     cout << "Count: " <<Qt::endl;
     std::cin >> count;
@@ -143,6 +143,7 @@ void User::ViewTransactionHistory()
 }
 void User::Get_Account_number()
 {
+    qInfo() << "===================================================";
     //send request to server to get data
     outStream << m_username;
     m_client.waitForBytesWritten();
@@ -166,6 +167,7 @@ void User::Get_Account_number()
 void User::Make_Transaction()
 {
     std::string transaction_amount, transactiontype;
+    qInfo() << "===================================================";
     cout << "For in transaktion type `in` for out type `out`" << Qt::endl;
     std::cin >> transactiontype;
     cout << "-----------------------------------------" << Qt::endl;
@@ -202,6 +204,7 @@ void User::Make_Transaction()
 void User::Transfer_Amount()
 {
     std::string to_Username, transfer_amount;
+    qInfo() << "===================================================";
     cout << "Transfer Amount>> <to_Username> <transfer amount>" << Qt::endl;
     cout << "to_Username>> " << Qt::endl;
     std::cin >> to_Username;
@@ -248,6 +251,7 @@ void User::Transfer_Amount()
 
 void User::ViewAccount()
 {
+    qInfo() << "===================================================";
     cout << "View account>>" << Qt::endl;
     outStream << m_username;
     m_client.waitForBytesWritten();
