@@ -366,12 +366,13 @@ QString JsonHandler::ViewTransactionHistory(const QString &fileName, const QStri
             result += QJsonDocument(jsonObject).toJson(QJsonDocument::Indented);
 
         }
+
         qDebug() << "Get history successfully";
-        // return result;
 
     }
     return result;
 }
+
 bool JsonHandler::SetHistory(QString fileName, QString username, const QString &amount)
 {
     QFile file(fileName);
