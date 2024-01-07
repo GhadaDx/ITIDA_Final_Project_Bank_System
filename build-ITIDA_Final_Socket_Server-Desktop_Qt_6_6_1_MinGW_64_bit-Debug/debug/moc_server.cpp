@@ -44,7 +44,7 @@ static constexpr auto qt_meta_stringdata_CLASSServerENDCLASS = QtMocHelpers::str
     "quit",
     "newConnection",
     "disconnected",
-    "readyRead"
+    "OnreadyRead"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSServerENDCLASS_t {
@@ -55,7 +55,7 @@ struct qt_meta_stringdata_CLASSServerENDCLASS_t {
     char stringdata3[5];
     char stringdata4[14];
     char stringdata5[13];
-    char stringdata6[10];
+    char stringdata6[12];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSServerENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -67,7 +67,7 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSServerENDCLASS_t qt_meta_string
         QT_MOC_LITERAL(14, 4),  // "quit"
         QT_MOC_LITERAL(19, 13),  // "newConnection"
         QT_MOC_LITERAL(33, 12),  // "disconnected"
-        QT_MOC_LITERAL(46, 9)   // "readyRead"
+        QT_MOC_LITERAL(46, 11)   // "OnreadyRead"
     },
     "Server",
     "start",
@@ -75,7 +75,7 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSServerENDCLASS_t qt_meta_string
     "quit",
     "newConnection",
     "disconnected",
-    "readyRead"
+    "OnreadyRead"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -128,7 +128,7 @@ Q_CONSTINIT const QMetaObject Server::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'disconnected'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'readyRead'
+        // method 'OnreadyRead'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -144,7 +144,7 @@ void Server::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 1: _t->quit(); break;
         case 2: _t->newConnection(); break;
         case 3: _t->disconnected(); break;
-        case 4: _t->readyRead(); break;
+        case 4: _t->OnreadyRead(); break;
         default: ;
         }
     }
