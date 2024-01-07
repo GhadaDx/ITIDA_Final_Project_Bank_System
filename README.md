@@ -31,7 +31,7 @@ Server application done based on QTcpSockets and QTcpServer with two classes
 
 
 # Finite State Machine for the Project
-![image](https://user-images.githubusercontent.com/42315079/224442827-0a204fe4-bfb9-4e15-89b5-9b4205fefe9f.png)
+![](images/Image1.png)
 
 # Demo
 
