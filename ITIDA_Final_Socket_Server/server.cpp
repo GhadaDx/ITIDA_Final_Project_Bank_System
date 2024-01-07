@@ -11,6 +11,10 @@ Server::Server(QObject *parent)
 }
 quint32 Server::counter = 1;
 
+quint32 Server::generateUniqueNumber(const QString& uniqueString)
+{
+    return qHash(uniqueString);
+}
 void Server::start()
 {
     if(!server.listen(QHostAddress::Any,1234))
@@ -431,8 +435,10 @@ void Server::Handlerequest(QString request,QString role)
                     outStream >> username>> password >> secondName >> balance >>age;
                     QVariantMap newObject;
                     QString NewObjectName = username;
-                    QString count = QString::number(counter);
-                    newObject["Account Number"]= count;
+                    quint32 accountnumber = generateUniqueNumber(username);
+
+                    QString Accountnumber = QString::number(accountnumber);
+                    newObject["Account Number"]= Accountnumber;
                     newObject["Age"] = age;
                     newObject["Balance"] = balance,
                         newObject["fullname"] = username + " "+ secondName;

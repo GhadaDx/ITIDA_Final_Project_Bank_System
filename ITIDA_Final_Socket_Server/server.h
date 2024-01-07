@@ -10,7 +10,6 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QDateTime>
 #include "jsonhandler.h"
 
 class Server : public QObject
@@ -19,8 +18,7 @@ class Server : public QObject
 public:
     explicit Server(QObject *parent = nullptr);
     void Handlerequest(QString,QString);
-
-    // QString printAccountnumber(const QString &fileName, const QString &objectName);
+    quint32 generateUniqueNumber(const QString& uniqueString);
 
 
 signals:
