@@ -7,22 +7,23 @@ Server::Server(QObject *parent)
     m_historyfile = "History.json";
     m_usersfile = "Users.json";
     m_adminsfile = "Admins.json";
+    pool.setMaxThreadCount(200);
+    qInfo() << "Threads: " << pool.maxThreadCount();
     connect(&server,&QTcpServer::newConnection,this,&Server::newConnection);
 }
-quint32 Server::counter = 1;
-
 quint32 Server::generateUniqueNumber(const QString& uniqueString)
 {
     return qHash(uniqueString);
 }
 void Server::start()
 {
-    if(!server.listen(QHostAddress::Any,1234))
+    qInfo() << this << " Start " << QThread::currentThread();
+    if(!server.listen(QHostAddress::Any,2020))
     {
         qWarning()<<server.errorString();
         return;
     }
-    qInfo()<<"Listening";
+    qInfo()<<"Listening...";
 }
 
 void Server::quit()
@@ -32,9 +33,11 @@ void Server::quit()
 
 void Server::newConnection()
 {
+    pool.activeThreadCount();
+
     QTcpSocket* socket=server.nextPendingConnection();
     connect(socket,&QTcpSocket::disconnected,this,&Server::disconnected);
-    connect(socket,&QTcpSocket::readyRead,this,&Server::readyRead);
+    connect(socket,&QTcpSocket::readyRead,this,&Server::OnreadyRead);
     qInfo()<<"connected to"<<socket;
 }
 
@@ -43,9 +46,11 @@ void Server::disconnected()
     QTcpSocket* socket=qobject_cast<QTcpSocket*>(sender());
     qInfo()<<"Disconnected"<<socket;
     qInfo()<<"parent"<<socket->parent();
+
+    socket->deleteLater();
 }
 
-void Server::readyRead()
+void Server::OnreadyRead()
 {
     //create pointer to the socket connected to the object send the request
     QTcpSocket* socket=qobject_cast<QTcpSocket*>(sender());
@@ -57,10 +62,10 @@ void Server::readyRead()
     inStream>>request>>role;
     qDebug()<<request<<role;
     //call this method to handle the request according to client role
-    Handlerequest(request,role);
+    HandlClienterequest(request,role);
 }
 
-void Server::Handlerequest(QString request,QString role)
+void Server::HandlClienterequest(QString request,QString role)
 {
     //create pointer to the socket connected to the object send the request
     QTcpSocket* socket=qobject_cast<QTcpSocket*>(sender());
@@ -444,7 +449,6 @@ void Server::Handlerequest(QString request,QString role)
                         newObject["fullname"] = username + " "+ secondName;
                     newObject["password"]= password;
                     ok = JsonHandler::AddNewObject(file, newObject, NewObjectName);
-                    counter ++;
                 }
 
             }

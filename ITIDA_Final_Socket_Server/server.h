@@ -10,6 +10,9 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QThreadPool>
+#include<QIODevice>
+#include<QIODeviceBase>
 #include "jsonhandler.h"
 
 class Server : public QObject
@@ -17,7 +20,7 @@ class Server : public QObject
     Q_OBJECT
 public:
     explicit Server(QObject *parent = nullptr);
-    void Handlerequest(QString,QString);
+    void HandlClienterequest(QString request,QString role);
     quint32 generateUniqueNumber(const QString& uniqueString);
 
 
@@ -27,10 +30,10 @@ public slots:
     void quit();
     void newConnection();
     void disconnected();
-    void readyRead();
+    void OnreadyRead();
 private:
     QTcpServer server;
-    static quint32 counter;
+    QThreadPool pool;
     QString m_path;
     QString m_historyfile;
     QString m_usersfile, m_adminsfile;
