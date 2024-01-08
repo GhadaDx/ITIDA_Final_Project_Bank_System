@@ -30,8 +30,7 @@ Server application done based on QTcpSockets and QTcpServer with two classes
    Json class used to handel the data base and work with the json files to get or add data to them.
 
 
-# Finite server-client Cli
+# Final server-client Cli
 ![](Images/Image1.png)
 
-# Demo
 
