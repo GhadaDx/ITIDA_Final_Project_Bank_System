@@ -78,10 +78,9 @@ bool JsonHandler::checkOnObject(const QString& filename, const QString& keyValue
     return false;  // Authentication failed
 }
 
-
 bool JsonHandler::printObjectFields(const QString &fileName, const QString &objectName, const QString &request, QString &respond)
 {
-    // bool ok =false;
+    bool ok =false;
     QFile file(fileName);
     if ( file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
         QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
@@ -94,9 +93,8 @@ bool JsonHandler::printObjectFields(const QString &fileName, const QString &obje
             if (jsonObject.contains(objectName) ) {
                 QJsonObject targetObject = jsonObject.value(objectName).toObject();
 
-                // ok = true;
+                ok = true;
                 respond = targetObject[request].toString();
-                return true;
 
             } else {
                 qWarning() << "Object with name" << objectName << "not found in the JSON file.";
@@ -107,7 +105,7 @@ bool JsonHandler::printObjectFields(const QString &fileName, const QString &obje
     } else {
         qWarning() << "Failed to open file for reading:" << file.errorString();
     }
-    return false;
+    return ok;
 }
 
 QString JsonHandler::ViewUserField(const QString &fileName, const QString &objectName)
@@ -143,10 +141,9 @@ QString JsonHandler::ViewUserField(const QString &fileName, const QString &objec
     } else {
         qWarning() << "Failed to open file for reading:" << file.errorString();
     }
-    return "Can't find the Account";
+    return "error";
 
 }
-
 
 bool JsonHandler::PrintAllDb(const QString &fileName, QString &DataBase)
 {
@@ -239,8 +236,7 @@ bool JsonHandler::EditSpecifcField(const QString &fileName, const QString &Objec
 
 }
 
-
-bool JsonHandler::updateOrCreateJsonFile(const QString& filename, const QString &Usersfilename, const QString& username,  const QString& accountnumber, const QString& amount) {
+bool JsonHandler::updateOrCreateJsonFile(const QString& filename, const QString &Usersfilename, const QString& username, const QString& amount) {
     bool ok = false;
     QString balance;
     QFile Usersfile(Usersfilename);
@@ -262,7 +258,7 @@ bool JsonHandler::updateOrCreateJsonFile(const QString& filename, const QString 
                     {
                         if(balance.toInt() + Amount >= 0)
                         {
-                            ok = SetHistory( filename, username,amount);
+                            ok = SaveTransaction( filename, username,amount);
 
                             if(ok == true)
                             {
@@ -285,7 +281,7 @@ bool JsonHandler::updateOrCreateJsonFile(const QString& filename, const QString 
                     }
                     else
                     {
-                        ok = SetHistory( filename, username,amount);
+                        ok = SaveTransaction( filename, username,amount);
                         if(ok == true)
                         {
                             qint32 NewBalance = balance.toInt() + Amount;
@@ -322,8 +318,6 @@ bool JsonHandler::updateOrCreateJsonFile(const QString& filename, const QString 
     return ok;
 }
 
-
-
 QString JsonHandler::ViewTransactionHistory(const QString &fileName, const QString &username,quint16 count)
 {
     QString result;
@@ -342,7 +336,7 @@ QString JsonHandler::ViewTransactionHistory(const QString &fileName, const QStri
         result = "Error: Failed to parse JSON data ";
     }
 
-    // Check if the JSON document is an object
+    // Check if the root element is an object
     if (!jsonDoc.isObject()) {
         result = "Error: JSON data is not an object";
     }
@@ -366,14 +360,13 @@ QString JsonHandler::ViewTransactionHistory(const QString &fileName, const QStri
             result += QJsonDocument(jsonObject).toJson(QJsonDocument::Indented);
 
         }
-
-        qDebug() << "Get history successfully";
+        qDebug() << "get history successfully";
+        // return result;
 
     }
     return result;
 }
-
-bool JsonHandler::SetHistory(QString fileName, QString username, const QString &amount)
+bool JsonHandler::SaveTransaction(QString fileName, QString username, const QString &amount)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
@@ -404,7 +397,7 @@ bool JsonHandler::SetHistory(QString fileName, QString username, const QString &
     {
         // QJsonObject  userObject = usersObject[username].toObject();
 
-        qDebug() << "User exists";
+        qDebug() << "user exists";
     }
     else
     {
@@ -436,7 +429,6 @@ bool JsonHandler::SetHistory(QString fileName, QString username, const QString &
 
 bool  JsonHandler::AddNewObject(const QString &fileName, QVariantMap newObject,const QString& NewObjectName)
 {
-
     QFile file(fileName);
     //Check for opening the file in Read only mode && as Text file
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -528,9 +520,6 @@ bool JsonHandler::Transfer_Amount(const QString &fileName, const QString &fromUs
     return ok;
 }
 
-
-
-
 bool JsonHandler::deleteObject(const QString &filePath, const QString &objectKey)
 {
     // Step 1: Read the JSON file
@@ -579,3 +568,4 @@ bool JsonHandler::deleteObject(const QString &filePath, const QString &objectKey
     }
     return false;
 }
+
