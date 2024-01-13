@@ -14,21 +14,19 @@ class Admin : public Client
 public:
     Admin();
     quint16 showOptions();
-    void GetAccountnumber ();
+    // void GetAccountnumber ();
     void ViewBankDatabase();
     void CreateNewUser();
     void DeleteUser();
     void UpdateUser();
     bool SetField(const QString& field, QString& value, bool& ok);
 
-
-    //login class
+    //client class
     bool SystemLogIn();
     bool CheckAccountNumber(QString accountnumber);
+    void GetAccountnumber ();
     void ViewAccountBalance();
     void ViewTransactionHistory();
-
-    //client class
     void sendrequesttoserver(QString request);
 
 public slots:

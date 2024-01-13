@@ -154,7 +154,7 @@ void Admin::GetAccountnumber()
     qout << "-----------------------------------------" << Qt::endl;
     QString Username=QString::fromStdString(m_usrname);
     //send request to server to get data
-    outStream << m_adminname << Username;
+    outStream << Username;
     m_client.waitForBytesWritten();
     //wait for the respond from the server to view it to the client
     m_client.waitForReadyRead();
@@ -445,9 +445,9 @@ void Admin::disconnect()
 
 void Admin::connected()
 {
-    QTextStream input(stdin, QIODevice::ReadOnly);
-    QString userInput = input.readLine().trimmed();
-    m_client.write(userInput.toUtf8());
+    // QTextStream input(stdin, QIODevice::ReadOnly);
+    // QString userInput = input.readLine().trimmed();
+    // m_client.write(userInput.toUtf8());
 }
 
 void Admin::disconnected()
