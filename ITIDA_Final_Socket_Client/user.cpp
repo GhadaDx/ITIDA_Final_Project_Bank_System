@@ -137,7 +137,7 @@ void User::ViewTransactionHistory()
         qDebug().noquote() <<"Your transaction history is :"<<m_serverrespond.toString();
     }
 }
-void User::Get_Account_number()
+void User::GetAccountnumber()
 {
     qInfo() << "===================================================";
     //send request to server to get data
@@ -164,7 +164,7 @@ void User::Make_Transaction()
 {
     std::string transaction_amount, transactiontype;
     qInfo() << "===================================================";
-    cout << "For in transaktion type `in` for out type `out`" << Qt::endl;
+    cout << "For deposit transaktion type `in` for withdraw type `out`" << Qt::endl;
     std::cin >> transactiontype;
     cout << "-----------------------------------------" << Qt::endl;
 
@@ -268,7 +268,7 @@ void User::sendrequesttoserver(QString request)
     }
     else if(request == "GetAccountNumber")
     {
-        Get_Account_number();
+        GetAccountnumber();
     }
     else if(request == "AccountBalance")
     {
@@ -313,9 +313,9 @@ void User::disconnect()
 
 void User::connected()
 {
-    QTextStream input(stdin, QIODevice::ReadOnly);
-    QString userInput = input.readLine().trimmed();
-    m_client.write(userInput.toUtf8());
+    // QTextStream input(stdin, QIODevice::ReadOnly);
+    // QString userInput = input.readLine().trimmed();
+    // m_client.write(userInput.toUtf8());
 }
 
 void User::disconnected()
