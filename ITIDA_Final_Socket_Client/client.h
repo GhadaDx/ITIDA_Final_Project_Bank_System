@@ -19,11 +19,9 @@ public:
     virtual bool CheckAccountNumber(QString accountnumber)=0;
     virtual void ViewAccountBalance()=0;
     virtual void ViewTransactionHistory()=0;
-
-
+    virtual void GetAccountnumber()=0;
 
 signals:
-
 protected:
     QDataStream outStream;
     QDataStream inStream;
@@ -32,7 +30,6 @@ protected:
     QVariant m_serverrespond;
     quint32 m_accountBalance;
     QString m_accountnumber;
-    // QVariant m_respond;
 };
 
 #endif // CLIENT_H
