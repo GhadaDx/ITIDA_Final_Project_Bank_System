@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
 
     while(true)
     {
+
         qout << "bank>> " << Qt::endl;
         userInput = qin.readLine();
 
@@ -88,13 +89,16 @@ int main(int argc, char *argv[])
                     qDebug() << "Invalid choise please try again.";
                     break;
                 }
-                qInfo() << "===================================================";
-                qDebug() << "Do you want to continue? (type `exit` to quit/ `y` to continue):";
-                qInfo() << "User:";
-                qin >> userInput;
-                if(userInput.toLower() == "exit")
+                if(!(userInput.toLower() == "exit"))
                 {
-                    break;
+                    qInfo() << "===================================================\n";
+                    qDebug() << "Do you want to continue? (type `exit` to quit/ `y` to continue):";
+                    qInfo() << "User:";
+                    qin >> userInput;
+                    if(userInput.toLower() == "exit")
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -141,11 +145,14 @@ int main(int argc, char *argv[])
                 case 8:
                     qInfo() <<  " Exit Program";
                     isLoggedIn = false;
+                    userInput = "exit";
                     break;
                 default:
                     qDebug() << "Invalid choise please try again.";
                     break;
                 }
+                if(!(userInput.toLower() == "exit"))
+                {
                 qInfo() << "===================================================\n";
                 qDebug() << "Do you want to continue? (type `exit` to quit/ `y` to continue):";
                 qInfo() << "Admin:";
@@ -154,12 +161,13 @@ int main(int argc, char *argv[])
                 {
                     break;
                 }
+                }
             }
         }
         else
         {
 
-            qout << "Invalid command. Type 'user' to user mode, `admin` to admin mode or 'exit' to quit.";
+            qout << "Invalid command. Type 'user' to user mode, `admin` to admin mode or 'exit' to quit." << Qt::endl;
             qout.flush();
         }
 
