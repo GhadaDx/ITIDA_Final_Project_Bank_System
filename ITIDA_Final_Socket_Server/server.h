@@ -3,42 +3,39 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QAbstractSocket>
-#include <QTcpSocket>
 #include <QTcpServer>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonObject>
+#include <QTcpSocket>
 #include <QThreadPool>
-#include<QIODevice>
-#include<QIODeviceBase>
-#include "jsonhandler.h"
+#include <QThread>
+#include "concurrent.h"
+#include "requesthandler.h"
 
-class Server : public QObject
+class Server : public QTcpServer
 {
     Q_OBJECT
 public:
     explicit Server(QObject *parent = nullptr);
-    void HandlClienterequest(QString request,QString role);
-    quint32 generateUniqueNumber(const QString& uniqueString);
-
+    ~Server();
 
 signals:
+
 public slots:
-    void start();
+    void start(quint16 port);
     void quit();
-    void newConnection();
+    void onNewConnection();
     void disconnected();
-    void OnreadyRead();
+
 private:
-    QTcpServer server;
-    QThreadPool pool;
-    QString m_path;
-    QString m_historyfile;
-    QString m_usersfile, m_adminsfile;
+    QThreadPool* pool;
+    QTcpServer* server;
+    QThread serverThread;
+    RequestHandler* Requesthandler;
 
 
+
+    // QTcpServer interface
+protected:
+    void incomingConnection(qintptr handle) Q_DECL_OVERRIDE;
 };
 
 #endif // SERVER_H
