@@ -2,15 +2,8 @@
     "Ghada": {
         "Account Number": "310129",
         "Age": "23",
-        "Balance": "197800",
+        "Balance": "11800",
         "fullname": "Ghada Gomaa",
         "password": "Ghada123"
-    },
-    "Rana": {
-        "Account Number": "281481647",
-        "Age": "24",
-        "Balance": "14000",
-        "fullname": "Rana Ali",
-        "password": "Rana123"
     }
 }
